@@ -194,7 +194,83 @@ Choose one of these devices:
 
 This allows BUTT to stream music from applications like Spotify.
 
+
 ------------------------------------------------------------------------
+
+# Optional: Using Virtual Audio Cable (Recommended)
+
+Sometimes "Stereo Mix" or "What U Hear" is not available on Windows.
+In that case you can use a virtual audio device.
+
+Download **VB-Cable (Virtual Audio Cable):**
+
+https://vb-audio.com/Cable/
+
+Download the ZIP file and run:
+
+    VBCABLE_Setup_x64.exe
+
+Click **Install Driver** and restart your computer if prompted.
+
+------------------------------------------------------------------------
+
+## How VB-Cable Works
+
+VB-Cable creates a virtual audio device with two sides:
+
+Playback device:
+    CABLE Input
+
+Recording device:
+    CABLE Output
+
+Audio sent to **CABLE Input** will appear in **CABLE Output**.
+
+------------------------------------------------------------------------
+
+## Configure Windows Audio
+
+1. Open **Windows Sound Settings**
+2. Under **Output device**, select:
+
+    CABLE Input (VB-Audio Virtual Cable)
+
+Now applications like Spotify will play audio into the virtual cable.
+
+------------------------------------------------------------------------
+
+## Configure BUTT
+
+Open:
+
+    Settings → Audio
+
+Set the **Input Device** to:
+
+    CABLE Output (VB-Audio Virtual Cable)
+
+Now BUTT receives the audio from the virtual cable.
+
+------------------------------------------------------------------------
+
+## Result
+
+Your audio pipeline becomes:
+
+    Spotify / Music Player
+            ↓
+    VB-Cable (virtual audio device)
+            ↓
+    BUTT
+            ↓
+    Icecast
+            ↓
+    Cloudflare Tunnel
+            ↓
+    Listeners
+
+------------------------------------------------------------------------
+
 
 # 6. Start Streaming
 
@@ -307,6 +383,21 @@ Open the stream and check statistics:
 
 Once everything is running:
 
-    Music Player → BUTT → Icecast → Cloudflare Tunnel → Listeners
+  ## Pipeline Overview
 
+```mermaid
+flowchart TD
+    A[Spotify / Music Player]
+    B[VB-Cable Virtual Audio Device]
+    C[BUTT Broadcaster]
+    D[Icecast Server localhost:8000]
+    E[Cloudflare Tunnel]
+    F[Listeners Browser]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+```
 You now have your own **simple internet radio stream**.
