@@ -199,9 +199,6 @@ This allows BUTT to stream music from applications like Spotify.
 
 # Optional: Using Virtual Audio Cable (Recommended)
 
-Sometimes "Stereo Mix" or "What U Hear" is not available on Windows.
-In that case you can use a virtual audio device.
-
 Download **VB-Cable (Virtual Audio Cable):**
 
 https://vb-audio.com/Cable/
