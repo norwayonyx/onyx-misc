@@ -197,7 +197,7 @@ They can listen using:
 
 ### No Audio
 
-Make sure Spotify outputs to:
+Make sure Spotify(or your audio program of choice) outputs to:
 
     CABLE Input
 
