@@ -7,3 +7,4 @@ A collection of guides/tips/etc for me and my friends.
 
 
 ## Discord
+- [How to create a discord bot using both python and .js](./discord-bot.md)
