@@ -1,6 +1,6 @@
 # 📚 Resources
 
-A collection of guides for me and my friends.
+A collection of guides/tips/etc for me and my friends.
 
 ## Audio streaming
 
