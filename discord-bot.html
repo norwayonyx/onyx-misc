@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discord Bot Guide — Onyx Resources</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface2: #161616;
+      --border: #222222;
+      --accent: #c8ff00;
+      --accent-dim: rgba(200, 255, 0, 0.07);
+      --text: #e8e8e8;
+      --muted: #555;
+      --code-bg: #0f0f0f;
+      --code-border: #1e1e1e;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.7;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,255,0,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,255,0,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 740px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Back link */
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      margin-bottom: 48px;
+      transition: color 0.2s;
+    }
+    .back:hover { color: var(--accent); }
+
+    /* Header */
+    header { margin-bottom: 56px; }
+
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .eyebrow::after {
+      content: '';
+      height: 1px;
+      width: 40px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 20px 24px;
+      margin-bottom: 48px;
+    }
+    .toc-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .toc ol {
+      padding-left: 20px;
+    }
+    .toc li {
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+    .toc a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .toc a:hover { color: var(--accent); }
+
+    /* Sections */
+    .section { margin-bottom: 56px; }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 .num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 3px;
+      padding: 2px 8px;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 24px 0 10px;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.05em;
+    }
+
+    p { margin-bottom: 14px; color: var(--text); font-size: 0.95rem; }
+
+    /* Steps */
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .step-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 3px;
+      padding: 2px 7px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; font-size: 0.9rem; }
+    .step-body strong { color: #fff; }
+
+    /* Code blocks */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 6px;
+      padding: 18px 20px;
+      overflow-x: auto;
+      margin: 12px 0 20px;
+      position: relative;
+    }
+    code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.7;
+      color: #c8ffa0;
+    }
+    p code, li code, .step-body code {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 3px;
+      padding: 1px 6px;
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+
+    .lang-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    /* Lang tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .tab-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .tab-label.py { border-color: rgba(200,255,0,0.3); color: var(--accent); background: var(--accent-dim); }
+    .tab-label.js { border-color: rgba(255,220,0,0.3); color: #ffd700; background: rgba(255,215,0,0.07); }
+
+    /* Warning box */
+    .warning {
+      background: rgba(255, 80, 80, 0.06);
+      border: 1px solid rgba(255, 80, 80, 0.2);
+      border-left: 3px solid #ff5050;
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-size: 0.88rem;
+      margin: 16px 0;
+    }
+    .warning strong { color: #ff5050; }
+
+    /* Lists */
+    ul, ol { padding-left: 20px; margin-bottom: 14px; }
+    li { font-size: 0.9rem; margin-bottom: 6px; color: var(--text); }
+    li strong { color: #fff; }
+
+    /* Checkboxes */
+    .checklist { list-style: none; padding-left: 0; }
+    .checklist li::before { content: '✅ '; }
+
+    /* Footer */
+    footer {
+      margin-top: 64px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--border);
+      letter-spacing: 0.1em;
+      text-align: center;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .container { animation: fadeUp 0.5s ease both; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back" href="./index.html">← back to resources</a>
+
+  <header>
+    <div class="eyebrow">Discord</div>
+    <h1>🤖 Creating a Discord Bot</h1>
+  </header>
+
+  <div class="toc">
+    <div class="toc-title">// Table of Contents</div>
+    <ol>
+      <li><a href="#prereqs">Prerequisites</a></li>
+      <li><a href="#portal">Creating the Bot on Discord</a></li>
+      <li><a href="#setup">Setting Up Your Project</a></li>
+      <li><a href="#code">Writing the Bot Code</a></li>
+      <li><a href="#commands">Adding Commands</a></li>
+      <li><a href="#invite">Inviting the Bot to Your Server</a></li>
+      <li><a href="#run">Running the Bot</a></li>
+      <li><a href="#hosting">Keeping the Bot Online 24/7</a></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <div class="section" id="prereqs">
+    <h2><span class="num">01</span> Prerequisites</h2>
+    <div class="tabs"><span class="tab-label py">Python</span></div>
+    <ul>
+      <li>Python 3.8 or higher — <strong>python.org</strong></li>
+      <li><code>pip</code> (comes with Python)</li>
+    </ul>
+    <div class="tabs"><span class="tab-label js">JavaScript</span></div>
+    <ul>
+      <li>Node.js 16.9 or higher — <strong>nodejs.org</strong></li>
+      <li><code>npm</code> (comes with Node.js)</li>
+    </ul>
+    <p>Both also require a <strong>Discord account</strong> and a text editor like VS Code.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="section" id="portal">
+    <h2><span class="num">02</span> Creating the Bot on Discord</h2>
+    <p>This step is the same regardless of language.</p>
+
+    <div class="step"><span class="step-num">01</span><div class="step-body">Go to <strong>discord.com/developers/applications</strong> and log in.</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-body">Click <strong>"New Application"</strong>, give it a name, and click <strong>"Create"</strong>.</div></div>
+    <div class="step"><span class="step-num">03</span><div class="step-body">In the sidebar click <strong>"Bot"</strong> → <strong>"Add Bot"</strong> → confirm.</div></div>
+    <div class="step"><span class="step-num">04</span><div class="step-body">Under <strong>Token</strong>, click <strong>"Reset Token"</strong> then <strong>"Copy"</strong>. Keep this secret!</div></div>
+    <div class="step"><span class="step-num">05</span><div class="step-body">Scroll to <strong>Privileged Gateway Intents</strong> and enable: <strong>Presence Intent</strong>, <strong>Server Members Intent</strong>, <strong>Message Content Intent</strong>.</div></div>
+
+    <div class="warning"><strong>⚠️ Warning:</strong> Never share your bot token or commit it to GitHub. If it's ever exposed, reset it immediately in the Developer Portal.</div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section" id="setup">
+    <h2><span class="num">03</span> Setting Up Your Project</h2>
+
+    <div class="tabs"><span class="tab-label py">Python</span></div>
+    <pre><code>mkdir my-discord-bot
+cd my-discord-bot
+
+# Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate        # Mac/Linux
+venv\Scripts\activate           # Windows
+
+# Install libraries
+pip install discord.py python-dotenv</code></pre>
+
+    <div class="tabs"><span class="tab-label js">JavaScript</span></div>
+    <pre><code>mkdir my-discord-bot
+cd my-discord-bot
+
+npm init -y
+npm install discord.js dotenv</code></pre>
+
+    <h3>// .env file (both)</h3>
+    <pre><code>DISCORD_TOKEN=your_token_here</code></pre>
+
+    <h3>// .gitignore (both)</h3>
+    <pre><code>.env
+node_modules/
+venv/
+__pycache__/</code></pre>
+  </div>
+
+  <!-- 4 -->
+  <div class="section" id="code">
+    <h2><span class="num">04</span> Writing the Bot Code</h2>
+
+    <div class="tabs"><span class="tab-label py">Python — bot.py</span></div>
+    <pre><code>import discord
+from discord.ext import commands
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='!', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'✅ Logged in as {bot.user} (ID: {bot.user.id})')
+
+bot.run(TOKEN)</code></pre>
+
+    <div class="tabs"><span class="tab-label js">JavaScript — index.js</span></div>
+    <pre><code>require('dotenv').config();
+const { Client, GatewayIntentBits } = require('discord.js');
+
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+    ]
+});
+
+client.once('ready', () => {
+    console.log(`✅ Logged in as ${client.user.tag}`);
+});
+
+client.login(process.env.DISCORD_TOKEN);</code></pre>
+  </div>
+
+  <!-- 5 -->
+  <div class="section" id="commands">
+    <h2><span class="num">05</span> Adding Commands</h2>
+
+    <div class="tabs"><span class="tab-label py">Python</span></div>
+    <pre><code>@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Hello, {ctx.author.name}! 👋')
+
+@bot.command()
+async def say(ctx, *, message: str):
+    await ctx.send(message)
+
+@bot.command()
+async def info(ctx):
+    embed = discord.Embed(
+        title="Bot Info",
+        description="I'm a custom Discord bot!",
+        color=discord.Color.blue()
+    )
+    embed.add_field(name="Prefix", value="!", inline=True)
+    embed.set_footer(text="Made with discord.py")
+    await ctx.send(embed=embed)</code></pre>
+
+    <div class="tabs"><span class="tab-label js">JavaScript</span></div>
+    <pre><code>client.on('messageCreate', message => {
+    if (message.author.bot) return;
+
+    if (message.content === '!hello') {
+        message.reply(`Hello, ${message.author.username}! 👋`);
+    }
+
+    if (message.content.startsWith('!say ')) {
+        const text = message.content.slice(5);
+        message.channel.send(text);
+    }
+
+    if (message.content === '!info') {
+        const { EmbedBuilder } = require('discord.js');
+        const embed = new EmbedBuilder()
+            .setTitle('Bot Info')
+            .setDescription("I'm a custom Discord bot!")
+            .setColor(0x0099FF)
+            .addFields({ name: 'Prefix', value: '!', inline: true })
+            .setFooter({ text: 'Made with discord.js' });
+        message.channel.send({ embeds: [embed] });
+    }
+});</code></pre>
+  </div>
+
+  <!-- 6 -->
+  <div class="section" id="invite">
+    <h2><span class="num">06</span> Inviting the Bot to Your Server</h2>
+
+    <div class="step"><span class="step-num">01</span><div class="step-body">In the Developer Portal, go to your app → <strong>OAuth2</strong> → <strong>URL Generator</strong>.</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-body">Under Scopes, check <strong>bot</strong> and <strong>applications.commands</strong>.</div></div>
+    <div class="step"><span class="step-num">03</span><div class="step-body">Under Bot Permissions, select: <strong>Read Messages</strong>, <strong>Send Messages</strong>, <strong>Embed Links</strong>, <strong>Read Message History</strong>.</div></div>
+    <div class="step"><span class="step-num">04</span><div class="step-body">Copy the generated URL, open it in your browser, select your server and click <strong>Authorize</strong>.</div></div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section" id="run">
+    <h2><span class="num">07</span> Running the Bot</h2>
+
+    <div class="tabs"><span class="tab-label py">Python</span></div>
+    <pre><code>python bot.py</code></pre>
+
+    <div class="tabs"><span class="tab-label js">JavaScript</span></div>
+    <pre><code>node index.js</code></pre>
+
+    <p>You should see: <code>✅ Logged in as YourBot#1234</code></p>
+  </div>
+
+  <!-- 8 -->
+  <div class="section" id="hosting">
+    <h2><span class="num">08</span> Keeping the Bot Online 24/7</h2>
+    <p>Your bot stops when you close the terminal. Common solutions:</p>
+
+    <h3>// Option A — PM2 on a VPS</h3>
+    <pre><code>npm install -g pm2
+
+# Python bot
+pm2 start bot.py --interpreter python3 --name my-bot
+
+# JS bot
+pm2 start index.js --name my-bot
+
+pm2 save
+pm2 startup</code></pre>
+
+    <h3>// Option B — Cloud Hosting (Railway / Render / Fly.io)</h3>
+    <ol>
+      <li>Push your code to a <strong>private</strong> GitHub repo</li>
+      <li>Sign up at <strong>railway.app</strong>, <strong>render.com</strong>, or <strong>fly.io</strong></li>
+      <li>Connect your repo and add <code>DISCORD_TOKEN</code> as an environment variable</li>
+      <li>Deploy — the platform runs your bot automatically</li>
+    </ol>
+
+    <h3>// Option C — Replit (Easiest)</h3>
+    <ol>
+      <li>Create a new Repl at <strong>replit.com</strong> (Python or Node.js)</li>
+      <li>Add your token to <strong>Secrets</strong> (not in code!)</li>
+      <li>Use <strong>UptimeRobot</strong> to ping your Repl URL every 5 minutes to keep it awake</li>
+    </ol>
+  </div>
+
+  <footer>norwayonyx / onyx-misc</footer>
+
+</div>
+</body>
+</html>
