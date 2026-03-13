@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Listen2MyRadio Guide — Onyx Resources</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #222222;
+      --accent: #c8ff00;
+      --accent-dim: rgba(200, 255, 0, 0.07);
+      --text: #e8e8e8;
+      --muted: #555;
+      --code-bg: #0f0f0f;
+      --code-border: #1e1e1e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.7;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,255,0,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,255,0,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 740px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      margin-bottom: 48px;
+      transition: color 0.2s;
+    }
+    .back:hover { color: var(--accent); }
+
+    header { margin-bottom: 48px; }
+
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .eyebrow::after {
+      content: '';
+      height: 1px;
+      width: 40px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* Quick start banner */
+    .quickstart {
+      background: var(--accent-dim);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 20px 24px;
+      margin-bottom: 48px;
+    }
+    .quickstart-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+    .quickstart ol {
+      padding-left: 20px;
+    }
+    .quickstart li {
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .quickstart li strong { color: #fff; }
+
+    /* Pipeline */
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin: 24px 0 32px;
+    }
+    .pipeline-node {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 28px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.82rem;
+      color: #fff;
+      text-align: center;
+      width: 260px;
+      position: relative;
+    }
+    .pipeline-node.accent {
+      border-color: rgba(200,255,0,0.3);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+    .pipeline-arrow {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.4;
+      margin: 2px 0;
+    }
+
+    /* Sections */
+    .section { margin-bottom: 52px; }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 .num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 3px;
+      padding: 2px 8px;
+    }
+
+    h3 {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin: 24px 0 10px;
+    }
+
+    p { font-size: 0.92rem; margin-bottom: 12px; }
+
+    a.dl-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid rgba(200,255,0,0.25);
+      border-radius: 4px;
+      padding: 6px 14px;
+      background: var(--accent-dim);
+      margin: 8px 0 16px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    a.dl-link:hover { background: rgba(200,255,0,0.14); border-color: var(--accent); }
+
+    /* Steps */
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 8px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .step-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 3px;
+      padding: 2px 7px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; font-size: 0.9rem; }
+    .step-body strong { color: #fff; }
+
+    /* Config block */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 6px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      margin: 10px 0 18px;
+    }
+    code {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.8;
+      color: #c8ffa0;
+    }
+    p code, li code {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 3px;
+      padding: 1px 6px;
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+
+    /* Settings table */
+    .settings {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 20px;
+      font-size: 0.85rem;
+    }
+    .settings th {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: left;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .settings td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+    }
+    .settings tr:last-child td { border-bottom: none; }
+    .settings td:first-child { color: var(--muted); }
+    .settings td:last-child { color: var(--accent); }
+    .settings tr { background: var(--surface); }
+    .settings tr:hover { background: var(--surface); }
+
+    /* Troubleshoot */
+    .trouble-item {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .trouble-title {
+      background: var(--surface);
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .trouble-title::before {
+      content: '!';
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: rgba(255,160,0,0.15);
+      border: 1px solid rgba(255,160,0,0.3);
+      border-radius: 50%;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: #ffa000;
+      flex-shrink: 0;
+    }
+    .trouble-body {
+      padding: 12px 18px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    .trouble-body code {
+      color: var(--accent);
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 3px;
+      padding: 1px 6px;
+      font-size: 0.78rem;
+    }
+
+    footer {
+      margin-top: 64px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--border);
+      letter-spacing: 0.1em;
+      text-align: center;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .container { animation: fadeUp 0.5s ease both; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back" href="./index.html">← back to resources</a>
+
+  <header>
+    <div class="eyebrow">Audio Streaming ⭐ Recommended</div>
+    <h1>📻 Spotify → Listen2MyRadio</h1>
+    <p class="subtitle">// stream music to your friends using a free online radio server</p>
+  </header>
+
+  <!-- Quick Start -->
+  <div class="quickstart">
+    <div class="quickstart-title">// Quick Start — 5 Minutes</div>
+    <ol>
+      <li>Install <strong>VB-Cable</strong></li>
+      <li>Install <strong>BUTT</strong></li>
+      <li>Create a free server on <strong>Listen2MyRadio</strong></li>
+      <li>Enter the server details in BUTT</li>
+      <li>Start streaming</li>
+      <li>Share the stream URL</li>
+    </ol>
+  </div>
+
+  <!-- Pipeline -->
+  <div class="section">
+    <h2>Pipeline Overview</h2>
+    <div class="pipeline">
+      <div class="pipeline-node">Spotify / Music Player</div>
+      <div class="pipeline-arrow">↓</div>
+      <div class="pipeline-node">VB-Cable <span style="color:var(--muted);font-size:0.7rem">(routes audio)</span></div>
+      <div class="pipeline-arrow">↓</div>
+      <div class="pipeline-node">BUTT <span style="color:var(--muted);font-size:0.7rem">(broadcasts audio)</span></div>
+      <div class="pipeline-arrow">↓</div>
+      <div class="pipeline-node accent">Listen2MyRadio <span style="color:var(--muted);font-size:0.7rem">(hosts stream)</span></div>
+      <div class="pipeline-arrow">↓</div>
+      <div class="pipeline-node">Friends / Listeners</div>
+    </div>
+  </div>
+
+  <!-- 1. Install -->
+  <div class="section" id="install">
+    <h2><span class="num">01</span> Install Required Software</h2>
+
+    <h3>// Spotify (optional)</h3>
+    <p>Use Spotify or any other music player to play what you want to broadcast.</p>
+    <a class="dl-link" href="https://www.spotify.com/download/" target="_blank">↗ spotify.com/download</a>
+
+    <h3>// VB-Audio Virtual Cable</h3>
+    <p>Routes audio from Spotify into the broadcasting software. After installing, restart your computer and set <code>CABLE Input</code> as your Spotify output device.</p>
+    <a class="dl-link" href="https://vb-audio.com/Cable/" target="_blank">↗ vb-audio.com/Cable</a>
+
+    <h3>// BUTT (Broadcast Using This Tool)</h3>
+    <p>Broadcasting software that sends your audio to the radio server.</p>
+    <a class="dl-link" href="https://danielnoethen.de/butt/" target="_blank">↗ danielnoethen.de/butt</a>
+  </div>
+
+  <!-- 2. Server -->
+  <div class="section" id="server">
+    <h2><span class="num">02</span> Create a Free Radio Server</h2>
+    <a class="dl-link" href="https://listen2myradio.com" target="_blank">↗ listen2myradio.com</a>
+    <p>Create a <strong>Free Icecast server</strong>. You'll receive credentials like:</p>
+    <pre><code>Hostname:        example.listen2myradio.com
+Port:            12345
+Mount:           /stream
+Stream Password: ********</code></pre>
+    <p>Save these — you'll need them in the next step.</p>
+  </div>
+
+  <!-- 3. Configure BUTT -->
+  <div class="section" id="butt">
+    <h2><span class="num">03</span> Configure BUTT</h2>
+    <p>Open BUTT and go to <code>Settings → Server → Add</code>. Fill in your server details:</p>
+    <table class="settings">
+      <thead><tr><th>Field</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Type</td><td>Icecast</td></tr>
+        <tr><td>Address</td><td>example.listen2myradio.com</td></tr>
+        <tr><td>Port</td><td>12345</td></tr>
+        <tr><td>Mountpoint</td><td>/stream</td></tr>
+        <tr><td>Icecast User</td><td>source</td></tr>
+        <tr><td>Password</td><td>(your stream password)</td></tr>
+      </tbody>
+    </table>
+    <p>Save the profile.</p>
+  </div>
+
+  <!-- 4. Audio -->
+  <div class="section" id="audio">
+    <h2><span class="num">04</span> Configure Audio Settings</h2>
+    <p>Go to <code>Settings → Audio</code> and use these recommended settings:</p>
+    <table class="settings">
+      <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Audio Device</td><td>CABLE Output (VB-Audio Virtual Cable)</td></tr>
+        <tr><td>Codec</td><td>MP3</td></tr>
+        <tr><td>Bitrate</td><td>96 kbps</td></tr>
+        <tr><td>Samplerate</td><td>44100 Hz</td></tr>
+        <tr><td>Channels</td><td>Stereo</td></tr>
+        <tr><td>Bitrate Mode</td><td>CBR</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 5. Stream -->
+  <div class="section" id="stream">
+    <h2><span class="num">05</span> Start Streaming</h2>
+    <p>Click <strong>Start Streaming</strong> in BUTT. You should see:</p>
+    <pre><code>Connecting...
+Connection established</code></pre>
+    <p>Audio is now being sent to the Listen2MyRadio server.</p>
+  </div>
+
+  <!-- 6. Test -->
+  <div class="section" id="test">
+    <h2><span class="num">06</span> Test & Share the Stream</h2>
+    <p>Open the stream URL in a browser or VLC to verify it's working:</p>
+    <pre><code>http://example.listen2myradio.com:12345/stream</code></pre>
+    <p>In VLC: <code>Media → Open Network Stream</code> and paste the URL.</p>
+    <p>Then send that same URL to your friends. They can listen using a web browser, VLC, or any app that supports radio streams.</p>
+  </div>
+
+  <!-- Troubleshooting -->
+  <div class="section" id="troubleshooting">
+    <h2>Troubleshooting</h2>
+
+    <div class="trouble-item">
+      <div class="trouble-title">No Audio</div>
+      <div class="trouble-body">Make sure Spotify (or your audio program) is outputting to <code>CABLE Input</code>.</div>
+    </div>
+
+    <div class="trouble-item">
+      <div class="trouble-title">Connection Failed</div>
+      <div class="trouble-body">Double-check your <code>Hostname</code>, <code>Port</code>, <code>Mountpoint</code>, and <code>Stream Password</code> in BUTT settings.</div>
+    </div>
+
+    <div class="trouble-item">
+      <div class="trouble-title">Audio Stuttering</div>
+      <div class="trouble-body">Lower the bitrate to <code>96 kbps</code> in <code>Settings → Audio</code>.</div>
+    </div>
+  </div>
+
+  <footer>norwayonyx / onyx-misc</footer>
+
+</div>
+</body>
+</html>
