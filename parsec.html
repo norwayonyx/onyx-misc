@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parsec Guide — Onyx Resources</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a; --surface: #111111; --border: #222222;
+      --accent: #c8ff00; --accent-dim: rgba(200,255,0,0.07);
+      --text: #e8e8e8; --muted: #555; --code-bg: #0f0f0f; --code-border: #1e1e1e;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; padding: 60px 24px; display: flex; flex-direction: column; align-items: center; line-height: 1.7; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(200,255,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(200,255,0,0.025) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+    .container { max-width: 740px; width: 100%; position: relative; z-index: 1; }
+    .back { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 48px; transition: color 0.2s; }
+    .back:hover { color: var(--accent); }
+    header { margin-bottom: 48px; }
+    .eyebrow { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .eyebrow::after { content: ''; height: 1px; width: 40px; background: var(--accent); opacity: 0.5; }
+    h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: #fff; margin-bottom: 10px; }
+    .subtitle { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--muted); }
+    .section { margin-bottom: 52px; }
+    h2 { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    h2 .num { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(200,255,0,0.2); border-radius: 3px; padding: 2px 8px; }
+    h3 { font-family: 'Space Mono', monospace; font-size: 0.82rem; letter-spacing: 0.08em; color: var(--accent); margin: 24px 0 10px; }
+    p { font-size: 0.92rem; margin-bottom: 12px; }
+    a.dl-link { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 0.78rem; color: var(--accent); text-decoration: none; border: 1px solid rgba(200,255,0,0.25); border-radius: 4px; padding: 6px 14px; background: var(--accent-dim); margin: 8px 0 16px; transition: background 0.2s, border-color 0.2s; }
+    a.dl-link:hover { background: rgba(200,255,0,0.14); border-color: var(--accent); }
+    .step { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; margin-bottom: 8px; display: flex; gap: 14px; align-items: flex-start; }
+    .step-num { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(200,255,0,0.2); border-radius: 3px; padding: 2px 7px; white-space: nowrap; margin-top: 2px; }
+    .step-body { flex: 1; font-size: 0.9rem; }
+    .step-body strong { color: #fff; }
+    .tip { background: var(--accent-dim); border: 1px solid rgba(200,255,0,0.2); border-left: 3px solid var(--accent); border-radius: 6px; padding: 14px 18px; font-size: 0.88rem; margin: 16px 0; }
+    .tip strong { color: var(--accent); }
+    .warning { background: rgba(255,160,0,0.06); border: 1px solid rgba(255,160,0,0.2); border-left: 3px solid #ffa000; border-radius: 6px; padding: 14px 18px; font-size: 0.88rem; margin: 16px 0; }
+    .warning strong { color: #ffa000; }
+    .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px 18px; }
+    .info-card .label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .info-card .value { font-size: 0.9rem; color: #fff; font-weight: 600; }
+    ul, ol { padding-left: 20px; margin-bottom: 14px; }
+    li { font-size: 0.9rem; margin-bottom: 6px; }
+    li strong { color: #fff; }
+    .pipeline { display: flex; flex-direction: column; align-items: center; margin: 24px 0 32px; }
+    .pipeline-node { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px 28px; font-family: 'Space Mono', monospace; font-size: 0.8rem; color: #fff; text-align: center; width: 280px; }
+    .pipeline-node.accent { border-color: rgba(200,255,0,0.3); color: var(--accent); background: var(--accent-dim); }
+    .pipeline-node .sub { display: block; font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+    .pipeline-arrow { font-size: 1.1rem; color: var(--muted); line-height: 1.6; margin: 2px 0; }
+    footer { margin-top: 64px; font-family: 'Space Mono', monospace; font-size: 10px; color: var(--border); letter-spacing: 0.1em; text-align: center; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .container { animation: fadeUp 0.5s ease both; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a class="back" href="./index.html">← back to resources</a>
+  <header>
+    <div class="eyebrow">Play with Friends</div>
+    <h1>🎮 Parsec</h1>
+    <p class="subtitle">// play local co-op games online with friends remotely</p>
+  </header>
+
+  <div class="section">
+    <h2>What is Parsec?</h2>
+    <p>Parsec streams your PC screen to a friend over the internet with very low latency — but more importantly, it lets friends connect their controllers and play <strong>local co-op games with you remotely</strong>. If a game supports two players on the same couch, Parsec makes it work online.</p>
+    <div class="card-row">
+      <div class="info-card"><div class="label">Cost</div><div class="value">Free tier available</div></div>
+      <div class="info-card"><div class="label">Works on</div><div class="value">Windows, Mac, Linux</div></div>
+      <div class="info-card"><div class="label">Best for</div><div class="value">Local co-op games online</div></div>
+      <div class="info-card"><div class="label">Needs</div><div class="value">Good upload speed on host</div></div>
+    </div>
+
+    <div class="pipeline">
+      <div class="pipeline-node">Host PC<span class="sub">runs the game</span></div>
+      <div class="pipeline-arrow">↕</div>
+      <div class="pipeline-node accent">Parsec<span class="sub">streams video + receives inputs</span></div>
+      <div class="pipeline-arrow">↕</div>
+      <div class="pipeline-node">Friend's PC<span class="sub">sees the screen, sends controller input</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="num">01</span> Install Parsec</h2>
+    <p>Both the host and all friends need to install Parsec and create a free account.</p>
+    <a class="dl-link" href="https://parsec.app/downloads" target="_blank">↗ parsec.app/downloads</a>
+    <p>Create a free account at <strong>parsec.app</strong> — both host and guests need one.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="num">02</span> Host: Share Your PC</h2>
+    <div class="step"><span class="step-num">01</span><div class="step-body">Open Parsec and log in</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-body">Click <strong>Share</strong> in the top right — this makes your PC visible to friends</div></div>
+    <div class="step"><span class="step-num">03</span><div class="step-body">Share your <strong>Parsec username</strong> or send a <strong>share link</strong> to friends</div></div>
+    <div class="step"><span class="step-num">04</span><div class="step-body">Launch the game you want to play</div></div>
+    <div class="step"><span class="step-num">05</span><div class="step-body">When a friend connects you'll get a notification — accept it</div></div>
+
+    <div class="tip"><strong>// Tip:</strong> In Parsec settings under <strong>Host</strong>, set your resolution and framerate. 1080p / 60fps is a good starting point. Lower it if friends experience lag.</div>
+  </div>
+
+  <div class="section">
+    <h2><span class="num">03</span> Guest: Connect to a Friend</h2>
+    <div class="step"><span class="step-num">01</span><div class="step-body">Open Parsec and log in</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-body">Search for your friend's <strong>Parsec username</strong> under the Friends tab, or open their share link</div></div>
+    <div class="step"><span class="step-num">03</span><div class="step-body">Click <strong>Connect</strong> — their screen will appear in a window on your PC</div></div>
+    <div class="step"><span class="step-num">04</span><div class="step-body">Plug in a controller if the game supports it — Parsec will forward your inputs to the host</div></div>
+  </div>
+
+  <div class="section">
+    <h2><span class="num">04</span> Controller Setup</h2>
+    <p>This is where Parsec shines. When a guest connects with a controller plugged in, it shows up on the host PC as a real gamepad — games see it exactly like a second controller plugged into the same computer.</p>
+    <h3>// Supported inputs</h3>
+    <ul>
+      <li>Xbox controllers (best compatibility)</li>
+      <li>PlayStation controllers (DualShock 4, DualSense)</li>
+      <li>Generic USB / Bluetooth gamepads</li>
+      <li>Keyboard & mouse (host can assign these as a virtual controller)</li>
+    </ul>
+    <div class="warning"><strong>⚠️ Note:</strong> Parsec free tier allows up to 4 guests. The game itself must support local co-op — Parsec doesn't add online to games that don't have any multiplayer at all.</div>
+  </div>
+
+  <div class="section">
+    <h2>Good Games to Try</h2>
+    <p>Any game with local co-op works. Some great ones that are free or cheap:</p>
+    <ul>
+      <li><strong>Stardew Valley</strong> — farming co-op, very relaxed</li>
+      <li><strong>Terraria</strong> — 2D survival adventure</li>
+      <li><strong>Cuphead</strong> — brutal but fun 2-player run & gun</li>
+      <li><strong>Spelunky 2</strong> — chaotic co-op platformer</li>
+      <li><strong>River City Girls</strong> — beat em up</li>
+      <li><strong>Any fighting game</strong> — Street Fighter, Mortal Kombat, etc.</li>
+      <li><strong>Retro games via emulators</strong> — use Parsec with RetroArch for classic co-op</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Troubleshooting</h2>
+    <h3>// High latency / lag</h3>
+    <p>Lower the host's stream quality in <strong>Settings → Host</strong>. Try 720p / 30fps. The host's upload speed is the bottleneck.</p>
+    <h3>// Controller not recognized</h3>
+    <p>In Parsec settings on the guest side, make sure <strong>Virtual Gamepad Type</strong> is set to <code>Xbox 360</code> for best compatibility.</p>
+    <h3>// Black screen on connect</h3>
+    <p>The host may need to enable <strong>GPU acceleration</strong> in Parsec host settings, or switch from integrated to dedicated GPU in the settings.</p>
+  </div>
+
+  <footer>norwayonyx / onyx-misc</footer>
+</div>
+</body>
+</html>
