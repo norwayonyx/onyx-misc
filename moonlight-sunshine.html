@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Moonlight + Sunshine Guide — Onyx Resources</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a; --surface: #111111; --border: #222222;
+      --accent: #c8ff00; --accent-dim: rgba(200,255,0,0.07);
+      --text: #e8e8e8; --muted: #555; --code-bg: #0f0f0f; --code-border: #1e1e1e;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; padding: 60px 24px; display: flex; flex-direction: column; align-items: center; line-height: 1.7; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(200,255,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(200,255,0,0.025) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+    .container { max-width: 740px; width: 100%; position: relative; z-index: 1; }
+    .back { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 48px; transition: color 0.2s; }
+    .back:hover { color: var(--accent); }
+    header { margin-bottom: 48px; }
+    .eyebrow { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .eyebrow::after { content: ''; height: 1px; width: 40px; background: var(--accent); opacity: 0.5; }
+    h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: #fff; margin-bottom: 10px; }
+    .subtitle { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--muted); }
+    .section { margin-bottom: 52px; }
+    h2 { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    h2 .num { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(200,255,0,0.2); border-radius: 3px; padding: 2px 8px; }
+    h3 { font-family: 'Space Mono', monospace; font-size: 0.82rem; letter-spacing: 0.08em; color: var(--accent); margin: 24px 0 10px; }
+    p { font-size: 0.92rem; margin-bottom: 12px; }
+    a.dl-link { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 0.78rem; color: var(--accent); text-decoration: none; border: 1px solid rgba(200,255,0,0.25); border-radius: 4px; padding: 6px 14px; background: var(--accent-dim); margin: 8px 0 16px; transition: background 0.2s, border-color 0.2s; }
+    a.dl-link:hover { background: rgba(200,255,0,0.14); border-color: var(--accent); }
+    pre { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px; padding: 16px 20px; overflow-x: auto; margin: 10px 0 18px; }
+    code { font-family: 'Space Mono', monospace; font-size: 0.78rem; line-height: 1.8; color: #c8ffa0; }
+    p code, li code { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 3px; padding: 1px 6px; font-size: 0.8rem; color: var(--accent); }
+    .step { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; margin-bottom: 8px; display: flex; gap: 14px; align-items: flex-start; }
+    .step-num { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(200,255,0,0.2); border-radius: 3px; padding: 2px 7px; white-space: nowrap; margin-top: 2px; }
+    .step-body { flex: 1; font-size: 0.9rem; }
+    .step-body strong { color: #fff; }
+    .tip { background: var(--accent-dim); border: 1px solid rgba(200,255,0,0.2); border-left: 3px solid var(--accent); border-radius: 6px; padding: 14px 18px; font-size: 0.88rem; margin: 16px 0; }
+    .tip strong { color: var(--accent); }
+    .warning { background: rgba(255,160,0,0.06); border: 1px solid rgba(255,160,0,0.2); border-left: 3px solid #ffa000; border-radius: 6px; padding: 14px 18px; font-size: 0.88rem; margin: 16px 0; }
+    .warning strong { color: #ffa000; }
+    .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px 18px; }
+    .info-card .label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .info-card .value { font-size: 0.9rem; color: #fff; font-weight: 600; }
+    .role-block { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 12px; }
+    .role-title { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .role-name { font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .role-desc { font-size: 0.88rem; color: var(--muted); }
+    .pipeline { display: flex; flex-direction: column; align-items: center; margin: 24px 0 32px; }
+    .pipeline-node { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px 28px; font-family: 'Space Mono', monospace; font-size: 0.8rem; color: #fff; text-align: center; width: 280px; }
+    .pipeline-node.accent { border-color: rgba(200,255,0,0.3); color: var(--accent); background: var(--accent-dim); }
+    .pipeline-node .sub { display: block; font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+    .pipeline-arrow { font-size: 1.1rem; color: var(--muted); line-height: 1.6; margin: 2px 0; }
+    .settings { width: 100%; border-collapse: collapse; margin: 12px 0 20px; }
+    .settings th { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .settings td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-family: 'Space Mono', monospace; font-size: 0.78rem; background: var(--surface); }
+    .settings tr:last-child td { border-bottom: none; }
+    .settings td:first-child { color: var(--muted); }
+    .settings td:last-child { color: var(--accent); }
+    ul { padding-left: 20px; margin-bottom: 14px; }
+    li { font-size: 0.9rem; margin-bottom: 6px; }
+    li strong { color: #fff; }
+    footer { margin-top: 64px; font-family: 'Space Mono', monospace; font-size: 10px; color: var(--border); letter-spacing: 0.1em; text-align: center; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .container { animation: fadeUp 0.5s ease both; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a class="back" href="./index.html">← back to resources</a>
+  <header>
+    <div class="eyebrow">Play with Friends</div>
+    <h1>🌙 Moonlight + Sunshine</h1>
+    <p class="subtitle">// open source game streaming from your own PC</p>
+  </header>
+
+  <div class="section">
+    <h2>What is this?</h2>
+    <p>Moonlight and Sunshine together let you stream games from your gaming PC to any other device — a laptop, a weaker PC, a phone, or a TV — over your local network or the internet. It's like GeForce NOW but self-hosted and completely free.</p>
+    <div class="card-row">
+      <div class="info-card"><div class="label">Cost</div><div class="value">Free & Open Source</div></div>
+      <div class="info-card"><div class="label">Host GPU</div><div class="value">Any (AMD, Nvidia, Intel)</div></div>
+      <div class="info-card"><div class="label">Latency</div><div class="value">Very low on LAN</div></div>
+      <div class="info-card"><div class="label">Quality</div><div class="value">Up to 4K / 120fps</div></div>
+    </div>
+
+    <div class="role-block">
+      <div class="role-title">// Runs on the gaming PC (host)</div>
+      <div class="role-name">☀️ Sunshine</div>
+      <div class="role-desc">The server software. Captures your screen and streams it. Replaces the old NVIDIA GameStream requirement — works on any GPU.</div>
+    </div>
+    <div class="role-block">
+      <div class="role-title">// Runs on the device you're playing on (client)</div>
+      <div class="role-name">🌙 Moonlight</div>
+      <div class="role-desc">The client app. Connects to Sunshine, receives the stream, and sends your inputs back. Available on Windows, Mac, Linux, Android, iOS, and Raspberry Pi.</div>
+    </div>
+
+    <div class="pipeline">
+      <div class="pipeline-node">Gaming PC<span class="sub">Sunshine running, game open</span></div>
+      <div class="pipeline-arrow">↕</div>
+      <div class="pipeline-node accent">Network / Internet</div>
+      <div class="pipeline-arrow">↕</div>
+      <div class="pipeline-node">Client Device<span class="sub">Moonlight app</span></div>
+    </div>
+  </div>
+
+  <!-- Sunshine setup -->
+  <div class="section">
+    <h2><span class="num">01</span> Install Sunshine (Host PC)</h2>
+    <p>Install this on the powerful PC that will be running the games.</p>
+    <a class="dl-link" href="https://github.com/LizardByte/Sunshine/releases" target="_blank">↗ Sunshine releases on GitHub</a>
+
+    <div class="step"><span class="step-num">01</span><div class="step-body">Download and run the Sunshine installer</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-body">Sunshine will open a web interface at <code>https://localhost:47990</code> — open it in your browser</div></div>
+    <div class="step"><span class="step-num">03</span><div class="step-body">Create a <strong>username and password</strong> when prompted — this protects your Sunshine admin panel</div></div>
+    <div class="step"><span class="step-num">04</span><div class="step-body">Go to <strong>Configuration → General</strong> and set your preferred stream resolution and framerate</div></div>
+    <div class="step"><span class="step-num">05</span><div class="step-body">Make sure Sunshine is set to <strong>run on startup</strong> so it's always ready</div></div>
+
+    <div class="tip"><strong>// Tip:</strong> Sunshine runs a local HTTPS server. Your browser will warn about the certificate — this is expected, just click "proceed anyway".</div>
+  </div>
+
+  <!-- Moonlight setup -->
+  <div class="section">
+    <h2><span class="num">02</span> Install Moonlight (Client Device)</h2>
+    <p>Install this on whatever device you want to stream to — a laptop, phone, TV stick, etc.</p>
+    <a class="dl-link" href="https://moonlight-stream.org" target="_blank">↗ moonlight-stream.org</a>
+
+    <div class="step"><span class="step-num">01</span><div class="step-body">Download and install Moonlight for your platform</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-body">On the same local network, Moonlight will <strong>auto-detect</strong> your Sunshine host — it should appear on the home screen</div></div>
+    <div class="step"><span class="step-num">03</span><div class="step-body">Click the host to connect — you'll see a <strong>PIN code</strong> on screen</div></div>
+    <div class="step"><span class="step-num">04</span><div class="step-body">Enter the PIN in the Sunshine web interface under <strong>PIN</strong> to pair the devices</div></div>
+    <div class="step"><span class="step-num">05</span><div class="step-body">You're paired — click any app or game to start streaming</div></div>
+  </div>
+
+  <!-- Remote access -->
+  <div class="section">
+    <h2><span class="num">03</span> Streaming Over the Internet</h2>
+    <p>To stream from outside your home network you need to expose your host PC. The easiest way, consistent with the rest of this site, is Cloudflare Tunnel — but for game streaming, direct port forwarding usually gives better latency.</p>
+
+    <h3>// Option A — Port Forwarding (best performance)</h3>
+    <div class="step"><span class="step-num">01</span><div class="step-body">Log into your router admin panel (usually <code>192.168.1.1</code>)</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-body">Forward the following ports to your host PC's local IP:</div></div>
+
+    <table class="settings">
+      <thead><tr><th>Port</th><th>Protocol</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>47984</td><td>TCP</td><td>HTTPS</td></tr>
+        <tr><td>47989</td><td>TCP</td><td>HTTP</td></tr>
+        <tr><td>48010</td><td>TCP</td><td>RTSP</td></tr>
+        <tr><td>47998–48000</td><td>UDP</td><td>Video / Audio / Control</td></tr>
+      </tbody>
+    </table>
+    <div class="step"><span class="step-num">03</span><div class="step-body">In Moonlight on the client, manually add your home's <strong>public IP address</strong> as a host</div></div>
+
+    <h3>// Option B — Tailscale (easiest, no port forwarding)</h3>
+    <p>Tailscale creates a private VPN between your devices with zero configuration. Install it on both the host and client, and they'll see each other as if on the same local network.</p>
+    <a class="dl-link" href="https://tailscale.com" target="_blank">↗ tailscale.com — free for personal use</a>
+
+    <div class="warning"><strong>⚠️ Internet streaming note:</strong> Game streaming requires good bandwidth. Aim for at least 20 Mbps upload on the host and 20 Mbps download on the client for a smooth 1080p/60fps experience.</div>
+  </div>
+
+  <div class="section">
+    <h2>Recommended Settings</h2>
+    <table class="settings">
+      <thead><tr><th>Setting</th><th>LAN</th><th>Internet</th></tr></thead>
+      <tbody>
+        <tr><td>Resolution</td><td>1080p or 4K</td><td>720p or 1080p</td></tr>
+        <tr><td>Framerate</td><td>60–120 fps</td><td>30–60 fps</td></tr>
+        <tr><td>Bitrate</td><td>20–50 Mbps</td><td>10–20 Mbps</td></tr>
+        <tr><td>Video Codec</td><td>H.264 or HEVC</td><td>HEVC (better compression)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Troubleshooting</h2>
+    <h3>// Host not appearing in Moonlight</h3>
+    <p>Make sure both devices are on the same network. Check that Sunshine is running — open <code>https://localhost:47990</code> on the host to verify.</p>
+    <h3>// High latency</h3>
+    <p>Lower the bitrate and resolution in Moonlight settings. On WiFi, try moving closer to the router or switching to a 5GHz network.</p>
+    <h3>// Black screen after connecting</h3>
+    <p>In Sunshine settings, try switching the <strong>encoder</strong> (software vs hardware). Also make sure your GPU drivers are up to date.</p>
+  </div>
+
+  <footer>norwayonyx / onyx-misc</footer>
+</div>
+</body>
+</html>
